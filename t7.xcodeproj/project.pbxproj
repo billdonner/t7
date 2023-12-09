@@ -10,6 +10,8 @@
 		88C5A7792B24BF8E00D0FEA5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C5A7782B24BF8E00D0FEA5 /* main.swift */; };
 		88C5A7822B24BFFB00D0FEA5 /* q20kshare in Frameworks */ = {isa = PBXBuildFile; productRef = 88C5A7812B24BFFB00D0FEA5 /* q20kshare */; };
 		88C5A7852B24C01A00D0FEA5 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 88C5A7842B24C01A00D0FEA5 /* ArgumentParser */; };
+		88C5A7872B24FACD00D0FEA5 /* phases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C5A7862B24FACD00D0FEA5 /* phases.swift */; };
+		88C5A7892B25074E00D0FEA5 /* parsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C5A7882B25074E00D0FEA5 /* parsing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +30,8 @@
 		88C5A7752B24BF8E00D0FEA5 /* t7 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = t7; sourceTree = BUILT_PRODUCTS_DIR; };
 		88C5A7782B24BF8E00D0FEA5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		88C5A77F2B24BFA400D0FEA5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		88C5A7862B24FACD00D0FEA5 /* phases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = phases.swift; sourceTree = "<group>"; };
+		88C5A7882B25074E00D0FEA5 /* parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parsing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,8 @@
 			isa = PBXGroup;
 			children = (
 				88C5A7782B24BF8E00D0FEA5 /* main.swift */,
+				88C5A7862B24FACD00D0FEA5 /* phases.swift */,
+				88C5A7882B25074E00D0FEA5 /* parsing.swift */,
 			);
 			path = t7;
 			sourceTree = "<group>";
@@ -134,7 +140,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88C5A7892B25074E00D0FEA5 /* parsing.swift in Sources */,
 				88C5A7792B24BF8E00D0FEA5 /* main.swift in Sources */,
+				88C5A7872B24FACD00D0FEA5 /* phases.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

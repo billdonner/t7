@@ -46,14 +46,30 @@ If Step 1 is skipped an alternative file of previously pumped blocks must be sup
 
 ## Command Line 
 ```
-t3  --pumpsys /users/fs/pumpsystemplate.json 
-    --pumpusr /users/fs/pumpusrtemplate.json
-      --valsys /users/fs/valsystemplate.json 
-      --valusr /users/fs/valusrtemplate.json
-          --repsys /users/fs/repsystemplate.json 
-          --repusr /users/fs/repusrtemplate.json
-            --altpumpedinputfile /users/fs/pumper-log.json
-            -skip-step4 -skip-validation -skip-repair
-```
+OVERVIEW: Chat With AI To Generate Data for Q20K (IOS) App
 
+Step 1 - ask the AI to generate question blocks
+Step 2 - ask the AI to identify problems in generated data
+Step 3 - ask the AI to repair the data
+Step 4 - ask the AI to again identify problems in generated data
 
+USAGE: t7 <pumpsys> <pumpusr> [--valsys <valsys>] [--valusr <valusr>] [--repsys <repsys>] [--repusr <repusr>] [--altpumpurl <altpumpurl>] [--model <model>] [--skipvalidation] [--skiprepair] [--skiprevalidation]
+
+ARGUMENTS:
+  <pumpsys>               pumper system template
+  <pumpusr>               pumper user template
+
+OPTIONS:
+  --valsys <valsys>       validation system template, default is ""
+  --valusr <valusr>       validation user template, default is ""
+  --repsys <repsys>       repair system template, default is ""
+  --repusr <repusr>       repair user template, default is ""
+  --altpumpurl <altpumpurl>
+                          alternate pumper input file, default is ""
+  --model <model>         model (default: gpt-4)
+  --skipvalidation        don't run validation step
+  --skiprepair            don't run repair step
+  --skiprevalidation      don't run re-validation step
+  --version               Show the version.
+  -h, --help              Show help information.
+  ```
