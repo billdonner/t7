@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import q20kshare
+import ArgumentParser
 
+let t7_version = "0.3.4"
 print("Hello, World!")
 
