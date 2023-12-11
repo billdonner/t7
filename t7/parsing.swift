@@ -8,6 +8,23 @@
 import Foundation
 import q20kshare
 import ArgumentParser
+func prep(_ x:String, initial:String) throws  -> FileHandle? {
+  if (FileManager.default.createFile(atPath: x, contents: nil, attributes: nil)) {
+    print(">Pumper created \(x)")
+  } else {
+    print("\(x) not created."); throw PumpingErrors.badOutputURL
+  }
+  guard let  newurl = URL(string:x)  else {
+    print("\(x) is a bad url"); throw PumpingErrors.badOutputURL
+  }
+  do {
+    let  fh = try FileHandle(forWritingTo: newurl)
+    fh.write(initial.data(using: .utf8)!)
+    return fh
+  } catch {
+    print("Cant write to \(newurl), \(error)"); throw PumpingErrors.cantWrite
+  }
+}
 
 struct T7: ParsableCommand   {
   
@@ -16,42 +33,55 @@ struct T7: ParsableCommand   {
     discussion: "Step 1 - ask the AI to generate question blocks\nStep 2 - ask the AI to identify problems in generated data\nStep 3 - ask the AI to repair the data\nStep 4 - ask the AI to again identify problems in generated data",
     version: t7_version )
   
-  @Argument(help: "pumper system template")
+  @Argument(help: "pumper system template URL")
   var pumpsys: String
   
-  @Argument( help:"pumper user template")
+  @Argument( help:"pumper user template URL")
   var pumpusr: String
   
-  @Option(help: "validation system template, default is \"\"")
+  @Option(help: "validation system template URL, default is no validation")
   var valsys: String = ""
   
-  @Option( help:"validation user template, default is \"\"")
+  @Option( help:"validation user template URL, default is \"\"")
   var valusr: String = ""
   
-  @Option(help: "repair system template, default is \"\"")
+  @Option(help: "repair system template URL, default is no repair")
   var repsys: String = ""
   
-  @Option( help:"repair user template, default is \"\"")
+  @Option( help:"repair user template URL, default is \"\"")
   var repusr: String = ""
   
-  @Option( help:"alternate pumper input file, default is \"\"")
-  var altpumpurl: String = ""
+  @Option( help:"alternate pumper input URL, default is \"\"")
+  var altpump: String = ""
+  
+  @Option( help:"pumpedoutput json stream file")
+  var pumpedoutstreamfile: String = ""
+  
+  @Option( help:"reapired json stream file")
+  var repairedoutstreamfile: String = ""
   
   @Option( help:"model")
   var model: String = "gpt-4"
   
-  @Flag(help:"don't run validation step")
-  var skipvalidation: Bool = false
-  
-  @Flag(help:"don't run repair step")
-  var skiprepair: Bool = false
-  
-  @Flag(help:"don't run re-validation step")
-  var skiprevalidation: Bool = false
-  
-  
+
+
+
   
   mutating func process_cli() throws {
+    
+    defer {
+      if pumpedhandle != nil {
+       // pumpedhandle.write()
+        
+      }
+      if repairedhandle != nil {
+        
+      }
+    }
+    
+    
+    
+     gmodel = model
     // get required template data, no defaults
     guard let sys = URL(string:pumpsys) else {
       fatalError("Invalid system template URL")
@@ -82,6 +112,7 @@ struct T7: ParsableCommand   {
     
     if valsys == "" {
       valsysMessage = ""
+      skipvalidation = true
     } else {
       guard let valsys = URL(string:valsys) else {
         fatalError("Invalid validation system template URL")
@@ -98,20 +129,31 @@ struct T7: ParsableCommand   {
     }
     if repsys == "" {
       repsysMessage = ""
+      skiprepair = true
     } else {
       guard let repsys = URL(string:repsys) else {
         fatalError("Invalid repair system template URL")
       }
       repsysMessage = try String(data:Data(contentsOf:repsys),encoding: .utf8) ?? ""
     }
+    
+    // output files get opened for writing incrmentally
+ 
+    if pumpedoutstreamfile != "" {
+        pumpedhandle =  try? prep(pumpedoutstreamfile,initial: "[\n")
+    }
+    if repairedoutstreamfile != "" {
+      repairedhandle = try?
+      prep(repairedoutstreamfile,initial: "[\n")
+    }
   }
-  func runAICycle () {
-    var phases:[Bool] = [true]
+  func runAICycle (_ userMessage:String,jobno:String) {
+    var phases:[Bool] =  [altpump.isEmpty]
+  
     phases += [!skipvalidation]
     phases += [!skiprepair]
     phases += [!skiprevalidation]
-    Phases.perform(phases)
-    
+    Phases.perform(phases, jobno: jobno,msg:userMessage)
   }
   
   mutating func run() throws {
@@ -121,13 +163,18 @@ struct T7: ParsableCommand   {
     catch {
       print("Error -> \(error)")
       print("command line processing failed ")
+      return
     }
     
     showTemplates()
     
-    let apiKey = try getAPIKey()
+    apiKey = try getAPIKey()
     
-    runAICycle()
+    let tmsgs = usrMessage.components(separatedBy: "*****")
+    let umsgs = tmsgs.compactMap{$0.trimmingCharacters(in: .whitespacesAndNewlines)}
+    umsgs.forEach { umsg in
+      runAICycle(umsg, jobno: UUID().uuidString)
+    }
     
   }
 }

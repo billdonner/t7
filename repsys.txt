@@ -2,4 +2,10 @@ Look at the message and find all the mistakes
 
 Rewrite the JSON array correcting all mistakes and if a block cannot be corrected, do not include in JSON array
 
-Please correct errors in capitalization and spelling before inserting in JSON Array
+Copy all good blocks into the output array
+
+If no blocks are good return []
+
+Correct errors in capitalization and spelling before inserting in JSON Array
+
+Only return the JSON Array or []

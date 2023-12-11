@@ -1,6 +1,6 @@
 #  T3 - interact with the AI
 
-version  0.3.4, ai = "chatgpt"
+version  0.3.5, ai = "chatgpt"
 
 replaces Pumper and LieDetector
 
