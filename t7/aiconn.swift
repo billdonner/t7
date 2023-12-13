@@ -7,9 +7,44 @@
 
 import Foundation
 
+func callOpenAI(APIKey: String, 
+                decoder:@escaping ((String) throws -> Void),
+                model:String,
+                systemMessage: String,
+                userMessage: String) async throws {
+  let baseURL = "https://api.openai.com/v1/chat/completions"
+  let headers = ["Authorization": "Bearer \(APIKey)","Content-Type":"application/json"]
+  let parameters = [
+    "model":model,
+    "max_tokens": 4000,
+    "temperature": 1,
+    "messages": [
+      ["role": "system", "content": systemMessage],
+      ["role": "user", "content": userMessage]
+    ]
+  ] as [String : Any]
+  
+  let jsonData = try JSONSerialization.data(withJSONObject: parameters)
+  
+  var request = URLRequest(url: URL(string: baseURL)!)
+  request.httpMethod = "POST"
+  request.allHTTPHeaderFields = headers
+  request.httpBody = jsonData
+  
+  let (data, _) = try await URLSession.shared.data(for:request)
+  
+  let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+  guard let choices = json?["choices"] as? [[String: Any]], let firstChoice = choices.first,
+        let message = firstChoice["message"] as? [String: Any], let content = message["content"] as? String
+  else {
+    fatalError("Unexpected response format")
+  }
+      
+  try decoder(content)
+}
 
 
-func callOpenAI(APIKey: String,semaphore:DispatchSemaphore, decoder:@escaping ((String)throws -> Void), model:String, systemMessage: String, userMessage: String) {
+func xcallOpenAI(APIKey: String,semaphore:DispatchSemaphore, decoder:@escaping ((String)throws -> Void), model:String, systemMessage: String, userMessage: String) {
   // Construct the API request payload
 
   let baseURL = "https://api.openai.com/v1/chat/completions"
@@ -63,7 +98,7 @@ func callOpenAI(APIKey: String,semaphore:DispatchSemaphore, decoder:@escaping ((
       guard let firstChoice = choices.first as? [String: Any] else {fatalError("firstfirst")}
       guard let reply = firstChoice["message"] as? [String: Any] else {fatalError("replyreply")}
       guard let content = reply["content"] as? String else {fatalError("contentcontent")}
-      print(">assistant:\n")
+      if gverbose {print(">assistant:\n")}
       try decoder(content)
     }
     catch {
@@ -71,4 +106,18 @@ func callOpenAI(APIKey: String,semaphore:DispatchSemaphore, decoder:@escaping ((
     }
     semaphore.signal()
   }.resume()
+}
+
+
+func useAPIRepeatedly() async {
+    for i in 1...10 {
+        do {
+            try await callOpenAI(APIKey: "ApiKey1", decoder: { print($0) }, model: "Model1", systemMessage: "SystemMessage1", userMessage: "UserMessage1")
+            try await callOpenAI(APIKey: "ApiKey2", decoder: { print($0) }, model: "Model2", systemMessage: "SystemMessage2", userMessage: "UserMessage2")
+            try await callOpenAI(APIKey: "ApiKey3", decoder: { print($0) }, model: "Model3", systemMessage: "SystemMessage3", userMessage: "UserMessage3")
+        } catch {
+            print("API call \(i) failed with error: \(error)")
+            return
+        }
+    }
 }

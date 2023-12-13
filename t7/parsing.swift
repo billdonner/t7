@@ -22,7 +22,8 @@ func prep(_ x:String, initial:String) throws  -> FileHandle? {
     fh.write(initial.data(using: .utf8)!)
     return fh
   } catch {
-    print("Cant write to \(newurl), \(error)"); throw PumpingErrors.cantWrite
+    print("Cant write to \(newurl), \(error)")
+    throw PumpingErrors.cantWrite
   }
 }
 
@@ -55,32 +56,24 @@ struct T7: ParsableCommand   {
   var altpump: String = ""
   
   @Option( help:"pumpedoutput json stream file")
-  var pumpedoutstreamfile: String = ""
+  var pumpedfile: String = ""
   
-  @Option( help:"reapired json stream file")
-  var repairedoutstreamfile: String = ""
+  @Option( help:"repaired json stream file")
+  var repairedfile: String = ""
   
   @Option( help:"model")
   var model: String = "gpt-4"
   
+  @Flag (help:"verbose")
+  var verbose : Bool = false 
 
 
 
   
   mutating func process_cli() throws {
     
-    defer {
-      if pumpedhandle != nil {
-       // pumpedhandle.write()
-        
-      }
-      if repairedhandle != nil {
-        
-      }
-    }
-    
-    
-    
+
+gverbose = verbose 
      gmodel = model
     // get required template data, no defaults
     guard let sys = URL(string:pumpsys) else {
@@ -139,24 +132,16 @@ struct T7: ParsableCommand   {
     
     // output files get opened for writing incrmentally
  
-    if pumpedoutstreamfile != "" {
-        pumpedhandle =  try? prep(pumpedoutstreamfile,initial: "[\n")
+    if pumpedfile != "" {
+        pumpHandle =  try? prep(pumpedfile,initial:"")// "[\n")
     }
-    if repairedoutstreamfile != "" {
-      repairedhandle = try?
-      prep(repairedoutstreamfile,initial: "[\n")
+    if repairedfile != "" {
+      repairHandle = try?  prep(repairedfile,initial:"")// "[\n")
     }
   }
-  func runAICycle (_ userMessage:String,jobno:String) {
-    var phases:[Bool] =  [altpump.isEmpty]
+
   
-    phases += [!skipvalidation]
-    phases += [!skiprepair]
-    phases += [!skiprevalidation]
-    Phases.perform(phases, jobno: jobno,msg:userMessage)
-  }
-  
-  mutating func run() throws {
+  mutating func run()   throws {
     do {
       try process_cli()
     }
@@ -164,18 +149,9 @@ struct T7: ParsableCommand   {
       print("Error -> \(error)")
       print("command line processing failed ")
       return
-    }
-    
+    } 
     showTemplates()
-    
     apiKey = try getAPIKey()
-    
-    let tmsgs = usrMessage.components(separatedBy: "*****")
-    let umsgs = tmsgs.compactMap{$0.trimmingCharacters(in: .whitespacesAndNewlines)}
-    umsgs.forEach { umsg in
-      runAICycle(umsg, jobno: UUID().uuidString)
-    }
-    
   }
 }
  

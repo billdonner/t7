@@ -51,14 +51,21 @@ var systemMessage : String = ""
 var usrMessage : String = ""
 
 var gmodel:String = ""
+var gverbose: Bool = false
 var apiKey:String = ""
 
-var skipvalidation: Bool = false
+var skipvalidation: Bool = true
 var skiprepair: Bool = false
-var skiprevalidation: Bool = false
+var skiprevalidation: Bool = true
 
-var pumpedhandle: FileHandle?
-var repairedhandle: FileHandle?
+var pumpHandle: FileHandle?
+var repairHandle: FileHandle?
+
+var firstrepaired = false
+var firstpumped = false
+
+var phasescount = 4
+
 
 func showTemplates() {
   print("+========T E M P L A T E S =========+")
@@ -70,4 +77,45 @@ func showTemplates() {
   print("<<<<<<<<repsysMessage>>>>>>>>>>",repsysMessage)
   print("+====== E N D  T E M P L A T E S =====+")
 }
-  T7.main()
+
+func runAICycle (_ userMessage:String,jobno:String) async throws{
+  var phases:[Bool] = [true]// [altpump.isEmpty]
+
+  phases += [!skipvalidation]
+  phases += [!skiprepair]
+  phases += [!skiprevalidation]
+  try await Phases.perform(phases, jobno: jobno,msg:userMessage)
+}
+
+
+func bigLoop () {
+//  defer {
+//    if let pumpedhandle = pumpHandle {
+//      // pumpedhandle.write()
+//      pumpedhandle.write("]".data(using: .utf8)!)
+//      try? pumpedhandle.close()
+//    }
+//    if let repairedhandle = repairHandle {
+//      repairedhandle.write("]".data(using: .utf8)!)
+//      try? repairedhandle.close()
+//    }
+//  }
+  let tmsgs = usrMessage.components(separatedBy: "*****")
+  let umsgs = tmsgs.compactMap{$0.trimmingCharacters(in: .whitespacesAndNewlines)}
+  phasescount = umsgs.count
+      Task  {
+        for str in umsgs {
+        try await   runAICycle(str, jobno: UUID().uuidString)
+          phasescount -= 1
+      }
+    }
+}
+
+T7.main()
+
+bigLoop()
+while phasescount > 0  {
+  sleep(10)
+  print("|",terminator:"")
+}
+print("\nExiting, all work completed to the best of our abilities.")

@@ -80,6 +80,14 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "--pumpedfile /users/fs/pumped.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--repairedfile /users/fs/repaired.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-h"
             isEnabled = "NO">
          </CommandLineArgument>
