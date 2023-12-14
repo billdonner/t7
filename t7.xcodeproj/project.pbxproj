@@ -33,10 +33,6 @@
 		88C5A77F2B24BFA400D0FEA5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		88C5A7862B24FACD00D0FEA5 /* phases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = phases.swift; sourceTree = "<group>"; };
 		88C5A7882B25074E00D0FEA5 /* parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parsing.swift; sourceTree = "<group>"; };
-		88C5A78A2B2639C100D0FEA5 /* pumpsys.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = pumpsys.txt; sourceTree = "<group>"; };
-		88C5A78B2B2639FC00D0FEA5 /* pumpusr.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = pumpusr.txt; sourceTree = "<group>"; };
-		88C5A78C2B263A9A00D0FEA5 /* repsys.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = repsys.txt; sourceTree = "<group>"; };
-		88C5A78D2B263BA900D0FEA5 /* valsys.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = valsys.txt; sourceTree = "<group>"; };
 		88C5A78E2B2649B000D0FEA5 /* aiconn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aiconn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,10 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				88C5A77F2B24BFA400D0FEA5 /* README.md */,
-				88C5A78A2B2639C100D0FEA5 /* pumpsys.txt */,
-				88C5A78D2B263BA900D0FEA5 /* valsys.txt */,
-				88C5A78B2B2639FC00D0FEA5 /* pumpusr.txt */,
-				88C5A78C2B263A9A00D0FEA5 /* repsys.txt */,
 				88C5A7772B24BF8E00D0FEA5 /* t7 */,
 				88C5A7762B24BF8E00D0FEA5 /* Products */,
 			);

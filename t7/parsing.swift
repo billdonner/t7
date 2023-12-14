@@ -52,6 +52,12 @@ struct T7: ParsableCommand   {
   @Option( help:"repair user template URL, default is \"\"")
   var repusr: String = ""
   
+  @Option(help: "re-validation system template URL, default is no revalidation")
+  var revalsys: String = ""
+  
+  @Option( help:"re-validation user template URL, default is \"\"")
+  var revalusr: String = ""
+  
   @Option( help:"alternate pumper input URL, default is \"\"")
   var altpump: String = ""
   
@@ -60,6 +66,12 @@ struct T7: ParsableCommand   {
   
   @Option( help:"repaired json stream file")
   var repairedfile: String = ""
+  
+  @Option( help:"validated json stream file")
+  var validatedfile: String = ""
+  
+  @Option( help:"revalidated json stream file")
+  var revalidatedfile: String = ""
   
   @Option( help:"model")
   var model: String = "gpt-4"
@@ -77,46 +89,48 @@ gverbose = verbose
      gmodel = model
     // get required template data, no defaults
     guard let sys = URL(string:pumpsys) else {
-      fatalError("Invalid system template URL")
+      throw T7Errors.badInputURL(url: pumpsys)
     }
     guard let usr = URL(string:pumpusr) else {
-      fatalError("Invalid user template URL")
+      throw T7Errors.badInputURL(url: pumpusr)
     }
     let sysMessage = try String(data:Data(contentsOf:sys),encoding: .utf8)
-    guard let sysMessage = sysMessage else { fatalError("Cant decode system template")
-    }
+    guard let sysMessage = sysMessage else {throw T7Errors.cantDecode(url: pumpsys)}
     systemMessage = sysMessage
     
     let userMessage = try String(data:Data(contentsOf:usr),encoding: .utf8)
-    guard let userMessage = userMessage else {
-      fatalError("Cant decode user template")
-    }
+    guard let userMessage = userMessage else {throw T7Errors.cantDecode(url: pumpusr)}
     usrMessage = userMessage
-    // if these are missing they default
+    
+    
+    // validation
     
     if valusr == "" {
       valusrMessage = ""
     } else {
       guard let valusr = URL(string:valusr) else {
-        fatalError("Invalid validation user template URL")
+        throw T7Errors.badInputURL(url: valusr)
       }
       valusrMessage = try String(data:Data(contentsOf:valusr),encoding: .utf8) ?? ""
     }
     
     if valsys == "" {
       valsysMessage = ""
-      skipvalidation = true
     } else {
       guard let valsys = URL(string:valsys) else {
-        fatalError("Invalid validation system template URL")
+        throw T7Errors.badInputURL(url: valsys)
       }
       valsysMessage = try String(data:Data(contentsOf:valsys),encoding: .utf8) ?? ""
+      
+      skipvalidation = false
     }
+    
+    // repair
     if repusr == "" {
       repusrMessage = ""
     } else {
       guard let repusr = URL(string:repusr) else {
-        fatalError("Invalid repair user template URL")
+        throw T7Errors.badInputURL(url: repusr)
       }
       repusrMessage = try String(data:Data(contentsOf:repusr),encoding: .utf8) ?? ""
     }
@@ -125,9 +139,30 @@ gverbose = verbose
       skiprepair = true
     } else {
       guard let repsys = URL(string:repsys) else {
-        fatalError("Invalid repair system template URL")
+          throw T7Errors.badInputURL(url: repsys)
       }
       repsysMessage = try String(data:Data(contentsOf:repsys),encoding: .utf8) ?? ""
+    }
+    
+    // validation
+    
+    if revalusr == "" {
+      revalusrMessage = ""
+    } else {
+      guard let revalusr = URL(string:revalusr) else {
+        throw T7Errors.badInputURL(url: revalusr)
+      }
+      revalusrMessage = try String(data:Data(contentsOf:revalusr),encoding: .utf8) ?? ""
+    }
+    
+    if revalsys == "" {
+      revalsysMessage = "" 
+    } else {
+      guard let revalsys = URL(string:revalsys) else {
+        throw T7Errors.badInputURL(url: revalsys)
+      }
+      revalsysMessage = try String(data:Data(contentsOf:revalsys),encoding: .utf8) ?? ""
+      skiprevalidation = false
     }
     
     // output files get opened for writing incrmentally
@@ -135,8 +170,14 @@ gverbose = verbose
     if pumpedfile != "" {
         pumpHandle =  try? prep(pumpedfile,initial:"")// "[\n")
     }
+    if validatedfile != "" {
+    validatedHandle = try?  prep(validatedfile,initial:"")// "[\n")
+    }
     if repairedfile != "" {
       repairHandle = try?  prep(repairedfile,initial:"")// "[\n")
+    }
+    if revalidatedfile != "" {
+     revalidatedHandle = try?  prep(revalidatedfile,initial:"")// "[\n")
     }
   }
 
@@ -147,11 +188,11 @@ gverbose = verbose
     }
     catch {
       print("Error -> \(error)")
-      print("command line processing failed ")
-      return
-    } 
+      throw T7Errors.commandLineError
+    }
     showTemplates()
     apiKey = try getAPIKey()
+    
   }
 }
  

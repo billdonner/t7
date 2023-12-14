@@ -11,19 +11,24 @@ func pumpPhase(_ userMessage:String) async  throws{
   print ("pumping...\(userMessage)")
   try await callAI(msg1:systemMessage,
          msg2:userMessage,
-         decoder:decodeQMEArray(_:))
+         decoder:decodeQMEArray )
 }
-func validationPhase() {
+func validationPhase() async  throws {
   print("validating...")
-  //callAI(msg1:valsysMessage,msg2:qmeBuf)
+  try await callAI(msg1:valsysMessage,
+         msg2:qmeBuf,
+         decoder:decodeValidationResponse )
 }
 func repairPhase(_ userMessage:String) async throws{
   print("repairing... \(userMessage)")
   try await callAI(msg1:repsysMessage,msg2:qmeBuf,
-         decoder:decodeQuestionsArray(_:))
+                   decoder:decodeQuestionsArray )
 }
-func revalidationPhase() {
+func revalidationPhase() async throws {
   print("revalidating...")
+  try await callAI(msg1:valsysMessage,
+         msg2:qmeBuf,
+         decoder:decodeReValidationResponse )
 }
 
 enum Phases:Int {
@@ -36,19 +41,35 @@ enum Phases:Int {
  
     print("\n=========== Job \(jobno) ============")
    if performPhases[0] {try await pumpPhase(msg)} else {print ("Skipping pumpPhase")}
-   if performPhases[1] {validationPhase()} else {print ("Skipping validationPhase")}
+   if performPhases[1] {try await validationPhase()} else {print ("Skipping validationPhase")}
    if performPhases[2] {try await repairPhase(msg)} else {print ("Skipping repairPhase")}
-   if performPhases[3] {revalidationPhase()} else {print ("Skipping revalidationPhase")}
+   if performPhases[3] {try await revalidationPhase()} else {print ("Skipping revalidationPhase")}
   }
 }
 
 // Function to call the OpenAI API
 
-fileprivate func decodeQuestionsArray(_ content: String) throws {
+fileprivate func decodeValidationResponse(_ content: String,_ started:Date) throws {
+  let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
+  print(">AI validation response \(content.count) bytes in \(elapsed) secs \n\(content)")
+  if let validatedHandle = validatedHandle {
+    validatedHandle.write(content.data(using:.utf8)!)
+  }
+}
+fileprivate func decodeReValidationResponse(_ content: String,_ started:Date) throws {
+  let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
+  print(">AI revalidation response \(content.count) bytes in \(elapsed) secs \n\(content)")
+  if let revalidatedHandle = revalidatedHandle {
+    revalidatedHandle.write(content.data(using:.utf8)!)
+  }
+}
+
+fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([QuestionsEntry].self,from:data)
-    print(">assistant repair response \(zz.count) blocks ok\n")
+    let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
+    print(">assistant repair response \(zz.count) blocks elapsed \(elapsed) ok\n")
     qmeBuf = content // stash as string
     // append response with prepended comma if we need one
     if !firstrepaired ,let repairedhandle=repairHandle {
@@ -63,22 +84,22 @@ fileprivate func decodeQuestionsArray(_ content: String) throws {
     if let str = str , let repairedhandle = repairHandle {
       let xyz = str.dropFirst().dropLast()
       repairedhandle.write(xyz.data(using: .utf8)!)
+      repairedhandle.write(",".data(using: .utf8)!)
     }
   }
 }
-fileprivate func decodeQMEArray(_ content: String) throws {
+
+fileprivate func decodeQMEArray(_ content: String,_ started:Date) throws {
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([QuestionsModelEntry].self,from:data)
-    print(">assistant primary response \(zz.count) blocks ok\n")
-    
+    let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
+    print(">assistant primary response \(zz.count) blocks elapsed \(elapsed) ok\n")
     // now convert the blocks into new format
     let zzz = zz.map {QuestionsEntry(from:$0)}
     let ppp = try JSONEncoder().encode(zzz)
     let str = String(data:ppp,encoding: .utf8) ?? ""
-    qmeBuf = str // stash as string//
-    
-
+    qmeBuf = str // stash as string//     let encoder = JSONEncoder()
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted
     let data = try encoder.encode(zzz)
@@ -101,15 +122,13 @@ fileprivate func decodeQMEArray(_ content: String) throws {
     }
   }
 }
+
+
 func callAI(msg1:String,msg2:String,
-            decoder:@escaping ((String) throws -> Void )) async throws {
-  let time1 = Date()
+            decoder:@escaping ((String,Date) throws -> Void )) async throws {
   try await callOpenAI(APIKey: apiKey,
              decoder: decoder,
              model: gmodel,
              systemMessage:  msg1,
              userMessage: msg2)
- 
-  let elapsed = Date().timeIntervalSince(time1)
-  print(">ChatGPT \(gmodel) returned in \(elapsed) secs")
 }

@@ -9,7 +9,20 @@ import Foundation
 import q20kshare
 import ArgumentParser
 
-let t7_version = "0.3.5"
+let t7_version = "0.3.6"
+
+public enum T7Errors: Error {
+  case commandLineError
+  case badResponseFromAI
+  case badInputURL(url:String)
+  case badOutputURL(url:String)
+  case cantDecode(url:String)
+  case cantWrite
+  case noAPIKey
+  case onlyLocalFilesSupported
+  case reachedMaxLimit
+  case reachedEndOfScript
+}
 
 struct QuestionsModelEntry: Codable {
   let question:String
@@ -39,12 +52,12 @@ struct QuestionsEntry: Codable {
 }
 
 var qmeBuf:String = ""
-var bufPumpValidate: String = ""
-var bufValidateRepair: String = ""
-var bufRepairRevalidate: String = ""
+
 
 var valusrMessage : String = ""
 var valsysMessage : String = ""
+var revalusrMessage : String = ""
+var revalsysMessage : String = ""
 var repusrMessage : String = ""
 var repsysMessage : String = ""
 var systemMessage : String = ""
@@ -60,6 +73,8 @@ var skiprevalidation: Bool = true
 
 var pumpHandle: FileHandle?
 var repairHandle: FileHandle?
+var validatedHandle: FileHandle?
+var revalidatedHandle: FileHandle?
 
 var firstrepaired = false
 var firstpumped = false
@@ -89,17 +104,7 @@ func runAICycle (_ userMessage:String,jobno:String) async throws{
 
 
 func bigLoop () {
-//  defer {
-//    if let pumpedhandle = pumpHandle {
-//      // pumpedhandle.write()
-//      pumpedhandle.write("]".data(using: .utf8)!)
-//      try? pumpedhandle.close()
-//    }
-//    if let repairedhandle = repairHandle {
-//      repairedhandle.write("]".data(using: .utf8)!)
-//      try? repairedhandle.close()
-//    }
-//  }
+
   let tmsgs = usrMessage.components(separatedBy: "*****")
   let umsgs = tmsgs.compactMap{$0.trimmingCharacters(in: .whitespacesAndNewlines)}
   phasescount = umsgs.count
@@ -110,12 +115,25 @@ func bigLoop () {
       }
     }
 }
+//main starts here
 
 T7.main()
-
+// big Loop runs async calls
 bigLoop()
+// wait for all phases to finish
+var j = 0
+var even = true
 while phasescount > 0  {
-  sleep(10)
-  print("|",terminator:"")
+  sleep(1)
+  j += 1
+  if j % 10 == 0  {
+    print(even ? "|" : "-",terminator:"")
+    even = !even
+  }
 }
+if let pumpHandle = pumpHandle { pumpHandle.closeFile()}
+if let repairHandle = repairHandle { repairHandle.closeFile()}
+if let validatedHandle = validatedHandle { validatedHandle.closeFile()}
+if let revalidatedHandle = revalidatedHandle { revalidatedHandle.closeFile()}
+
 print("\nExiting, all work completed to the best of our abilities.")

@@ -61,10 +61,18 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--valsys file:///users/fs/valsys.txt"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--valusr file:///users/fs/valusr.txt"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--revalsys file:///users/fs/valsys.txt"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--revalusr file:///users/fs/valusr.txt"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -85,6 +93,14 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--repairedfile /users/fs/repaired.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--validatedfile /users/fs/validated.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--revalidatedfile /users/fs/revalidated.json"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
