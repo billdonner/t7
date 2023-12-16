@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import q20kshare
 
 func pumpPhase(_ userMessage:String) async  throws{
   print ("pumping...\(userMessage)")
   try await callAI(msg1:systemMessage,
          msg2:userMessage,
-         decoder:decodeQMEArray )
+         decoder:decodePumpingArray )
 }
 func validationPhase() async  throws {
   print("validating...")
@@ -67,7 +68,7 @@ fileprivate func decodeReValidationResponse(_ content: String,_ started:Date) th
 fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
-    let zz = try JSONDecoder().decode([QuestionsEntry].self,from:data)
+    let zz = try JSONDecoder().decode([Challenge].self,from:data)
     let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
     print(">assistant repair response \(zz.count) blocks elapsed \(elapsed) ok\n")
     qmeBuf = content // stash as string
@@ -89,14 +90,14 @@ fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
   }
 }
 
-fileprivate func decodeQMEArray(_ content: String,_ started:Date) throws {
+fileprivate func decodePumpingArray(_ content: String,_ started:Date) throws {
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([QuestionsModelEntry].self,from:data)
     let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
     print(">assistant primary response \(zz.count) blocks elapsed \(elapsed) ok\n")
     // now convert the blocks into new format
-    let zzz = zz.map {QuestionsEntry(from:$0)}
+    let zzz = zz.map {$0.makeChallenge()}
     let ppp = try JSONEncoder().encode(zzz)
     let str = String(data:ppp,encoding: .utf8) ?? ""
     qmeBuf = str // stash as string//     let encoder = JSONEncoder()

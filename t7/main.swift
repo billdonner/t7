@@ -9,7 +9,7 @@ import Foundation
 import q20kshare
 import ArgumentParser
 
-let t7_version = "0.3.6"
+let t7_version = "0.4.0"
 
 public enum T7Errors: Error {
   case commandLineError
@@ -30,26 +30,42 @@ struct QuestionsModelEntry: Codable {
   let correct:String
   let explanation:String
   let hint:String
-}
-struct QuestionsEntry: Codable {
-  let id:String
-  let tod:Date
-  let question:String
-  let answers:[String]
-  let correct:String
-  let explanation:String
-  let hint:String
+  let topic:String
   
-  init(from:QuestionsModelEntry) {
-    id = UUID().uuidString
-    tod = Date()
-    question = from.question
-    answers = from.answers
-    correct = from.correct
-    explanation = from.explanation
-    hint = from.hint
-  }
+  func makeChallenge( )  -> Challenge {
+    let from = self
+    return Challenge(question: from.question, topic: from.topic, hint: from.hint, answers: from.answers, correct: from.correct,explanation: from.explanation,
+                     id:UUID().uuidString, source:gmodel )
+      }
 }
+//struct QuestionsEntry: Codable {
+//  let id:String
+//  let date:Date
+//  let topic:String
+//  let question:String
+//  let answers:[String]
+//  let correct:String
+//  let explanation:String
+//  let hint:String
+//  
+//  
+//  init(from:QuestionsModelEntry) {
+//    id = UUID().uuidString
+//    date = Date()
+//    topic = from.topic
+//    question = from.question
+//    answers = from.answers
+//    correct = from.correct
+//    explanation = from.explanation
+//    hint = from.hint
+//  }
+//}
+
+ 
+func makeChallenge(from:QuestionsModelEntry)  -> Challenge {
+  Challenge(question: from.question, topic: from.topic, hint: from.hint, answers: from.answers, correct: from.correct,explanation: from.explanation)
+    }
+ 
 
 var qmeBuf:String = ""
 
