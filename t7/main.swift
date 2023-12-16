@@ -9,7 +9,7 @@ import Foundation
 import q20kshare
 import ArgumentParser
 
-let t7_version = "0.4.0"
+let t7_version = "0.4.1"
 
 public enum T7Errors: Error {
   case commandLineError
@@ -147,8 +147,14 @@ while phasescount > 0  {
     even = !even
   }
 }
-if let pumpHandle = pumpHandle { pumpHandle.closeFile()}
-if let repairHandle = repairHandle { repairHandle.closeFile()}
+if let pumpHandle = pumpHandle {
+ // pumpHandle.write("\n]".data(using: .utf8)!)
+  pumpHandle.closeFile()
+}
+if let repairHandle = repairHandle {
+  //repairHandle.write("\n]".data(using: .utf8)!)
+  repairHandle.closeFile()
+}
 if let validatedHandle = validatedHandle { validatedHandle.closeFile()}
 if let revalidatedHandle = revalidatedHandle { revalidatedHandle.closeFile()}
 

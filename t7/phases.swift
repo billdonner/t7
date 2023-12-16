@@ -66,6 +66,7 @@ fileprivate func decodeReValidationResponse(_ content: String,_ started:Date) th
 }
 
 fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
+  var first = true
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([Challenge].self,from:data)
@@ -73,24 +74,22 @@ fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
     print(">assistant repair response \(zz.count) blocks elapsed \(elapsed) ok\n")
     qmeBuf = content // stash as string
     // append response with prepended comma if we need one
-    if !firstrepaired ,let repairedhandle=repairHandle {
-     repairedhandle.write(",".data(using: .utf8)!)
-    } else {
-      firstrepaired  = false
+    if let repairedhandle=repairHandle {
+       repairedhandle.write(content.data(using: .utf8)!)
     }
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = .prettyPrinted
-    let data = try encoder.encode(zz)
-    let str = String(data:data,encoding: .utf8)
-    if let str = str , let repairedhandle = repairHandle {
-      let xyz = str.dropFirst().dropLast()
-      repairedhandle.write(xyz.data(using: .utf8)!)
-      repairedhandle.write(",".data(using: .utf8)!)
-    }
+//    let encoder = JSONEncoder()
+//    encoder.outputFormatting = .prettyPrinted
+//    let data = try encoder.encode(zz)
+//    let str = String(data:data,encoding: .utf8)
+//    if let str = str , let repairedhandle = repairHandle {
+//      let xyz = str.dropFirst().dropLast()
+//      repairedhandle.write(xyz.data(using: .utf8)!)
+//    }
   }
 }
 
 fileprivate func decodePumpingArray(_ content: String,_ started:Date) throws {
+  var notfirst = false
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([QuestionsModelEntry].self,from:data)
@@ -101,26 +100,28 @@ fileprivate func decodePumpingArray(_ content: String,_ started:Date) throws {
     let ppp = try JSONEncoder().encode(zzz)
     let str = String(data:ppp,encoding: .utf8) ?? ""
     qmeBuf = str // stash as string//     let encoder = JSONEncoder()
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = .prettyPrinted
-    let data = try encoder.encode(zzz)
-    let str2 = String(data:data,encoding: .utf8)
-    if let str2 = str2 , let pumpedhandle = pumpHandle {
-      let xyz = str2.dropFirst().dropLast()
-      if !xyz.isEmpty {
-        let xx = xyz.data(using: .utf8)
-        if let xx = xx {
-          // append response with prepended comma if we need one
-          if !firstpumped {
-         //// pumpedhandle.write(",".data(using: .utf8)!)
-          } else {
-            firstpumped  = false
-          }
-          pumpedhandle.write(xx)
-          pumpedhandle.write(",".data(using: .utf8)!)
-        }
-      }
+    if let pumpedHandle = pumpHandle {
+      pumpedHandle.write(str.data(using:.utf8)!)
     }
+//    let encoder = JSONEncoder()
+//    encoder.outputFormatting = .prettyPrinted
+//    let data = try encoder.encode(zzz)
+//    let str2 = String(data:data,encoding: .utf8)
+//    if let str2 = str2 , let pumpedhandle = pumpHandle {
+//      let xyz = str2.dropFirst().dropLast()
+//      if !xyz.isEmpty {
+//        let xx = xyz.data(using: .utf8)
+//        if let xx = xx {
+//          // append response with prepended comma if we need one
+//          if notfirst {
+//              pumpedhandle.write(",".data(using: .utf8)!)
+//          } else {
+//            notfirst = true
+//          }
+//          pumpedhandle.write(xx)
+//        }
+//      }
+//    }
   }
 }
 

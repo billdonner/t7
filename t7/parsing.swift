@@ -168,13 +168,13 @@ gverbose = verbose
     // output files get opened for writing incrmentally
  
     if pumpedfile != "" {
-        pumpHandle =  try? prep(pumpedfile,initial:"")// "[\n")
+        pumpHandle =  try? prep(pumpedfile,initial:"")
     }
     if validatedfile != "" {
     validatedHandle = try?  prep(validatedfile,initial:"")// "[\n")
     }
     if repairedfile != "" {
-      repairHandle = try?  prep(repairedfile,initial:"")// "[\n")
+      repairHandle = try?  prep(repairedfile,initial: "")
     }
     if revalidatedfile != "" {
      revalidatedHandle = try?  prep(revalidatedfile,initial:"")// "[\n")
