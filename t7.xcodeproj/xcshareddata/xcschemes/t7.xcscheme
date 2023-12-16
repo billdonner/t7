@@ -107,6 +107,10 @@
             argument = "-h"
             isEnabled = "NO">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--model gpt-3.5-turbo"
+            isEnabled = "NO">
+         </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable

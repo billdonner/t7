@@ -8,10 +8,11 @@
 import Foundation
 import q20kshare
 
+
 func pumpPhase(_ userMessage:String) async  throws{
   print ("pumping...\(userMessage)")
   try await callAI(msg1:systemMessage,
-         msg2:userMessage,
+                   msg2:userMessage,
          decoder:decodePumpingArray )
 }
 func validationPhase() async  throws {
@@ -50,14 +51,14 @@ enum Phases:Int {
 
 // Function to call the OpenAI API
 
-fileprivate func decodeValidationResponse(_ content: String,_ started:Date) throws {
+fileprivate func decodeValidationResponse(_ content: String,_ started:Date, _ needscomma:Bool) throws {
   let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
   print(">AI validation response \(content.count) bytes in \(elapsed) secs \n\(content)")
   if let validatedHandle = validatedHandle {
     validatedHandle.write(content.data(using:.utf8)!)
   }
 }
-fileprivate func decodeReValidationResponse(_ content: String,_ started:Date) throws {
+fileprivate func decodeReValidationResponse(_ content: String,_ started:Date, _ needscomma:Bool) throws {
   let elapsed = String(format:"%4.2f",Date().timeIntervalSince(started))
   print(">AI revalidation response \(content.count) bytes in \(elapsed) secs \n\(content)")
   if let revalidatedHandle = revalidatedHandle {
@@ -65,8 +66,7 @@ fileprivate func decodeReValidationResponse(_ content: String,_ started:Date) th
   }
 }
 
-fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
-  var first = true
+fileprivate func decodeQuestionsArray(_ content: String,_ started:Date, _ needscomma:Bool) throws {
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([Challenge].self,from:data)
@@ -75,7 +75,13 @@ fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
     qmeBuf = content // stash as string
     // append response with prepended comma if we need one
     if let repairedhandle=repairHandle {
-       repairedhandle.write(content.data(using: .utf8)!)
+      let str2 = content.dropFirst().dropLast()
+      if !str2.isEmpty {
+        if needscomma {
+          repairedhandle.write(",".data(using: .utf8)!)
+        }
+        repairedhandle.write(str2.data(using:.utf8)!)
+      }
     }
 //    let encoder = JSONEncoder()
 //    encoder.outputFormatting = .prettyPrinted
@@ -88,8 +94,7 @@ fileprivate func decodeQuestionsArray(_ content: String,_ started:Date) throws {
   }
 }
 
-fileprivate func decodePumpingArray(_ content: String,_ started:Date) throws {
-  var notfirst = false
+fileprivate func decodePumpingArray(_ content: String,_ started:Date, _ needscomma:Bool) throws {
   if gverbose {print("\(content)")}
   if let data = content.data(using:.utf8) {
     let zz = try JSONDecoder().decode([QuestionsModelEntry].self,from:data)
@@ -101,7 +106,13 @@ fileprivate func decodePumpingArray(_ content: String,_ started:Date) throws {
     let str = String(data:ppp,encoding: .utf8) ?? ""
     qmeBuf = str // stash as string//     let encoder = JSONEncoder()
     if let pumpedHandle = pumpHandle {
-      pumpedHandle.write(str.data(using:.utf8)!)
+      let str2 = str.dropFirst().dropLast()
+      if !str2.isEmpty {
+        if needscomma {
+          pumpedHandle.write(",".data(using: .utf8)!)
+        }
+        pumpedHandle.write(str2.data(using:.utf8)!)
+      }
     }
 //    let encoder = JSONEncoder()
 //    encoder.outputFormatting = .prettyPrinted
@@ -124,10 +135,10 @@ fileprivate func decodePumpingArray(_ content: String,_ started:Date) throws {
 //    }
   }
 }
-
+typealias DecoderFunc =  (String,Date,Bool) throws -> Void
 
 func callAI(msg1:String,msg2:String,
-            decoder:@escaping ((String,Date) throws -> Void )) async throws {
+            decoder:@escaping DecoderFunc) async throws {
   try await callOpenAI(APIKey: apiKey,
              decoder: decoder,
              model: gmodel,

@@ -9,7 +9,7 @@ import Foundation
 import q20kshare
 import ArgumentParser
 
-let t7_version = "0.4.1"
+let t7_version = "0.4.2"
 
 public enum T7Errors: Error {
   case commandLineError
@@ -69,7 +69,7 @@ func makeChallenge(from:QuestionsModelEntry)  -> Challenge {
 
 var qmeBuf:String = ""
 
-
+var firsttime = true 
 var valusrMessage : String = ""
 var valsysMessage : String = ""
 var revalusrMessage : String = ""
@@ -128,10 +128,13 @@ func bigLoop () {
         for str in umsgs {
         try await   runAICycle(str, jobno: UUID().uuidString)
           phasescount -= 1
+          firsttime = false 
       }
     }
 }
 //main starts here
+
+print(">T7 Command Line: \(CommandLine.arguments)")
 
 T7.main()
 // big Loop runs async calls
@@ -148,11 +151,11 @@ while phasescount > 0  {
   }
 }
 if let pumpHandle = pumpHandle {
- // pumpHandle.write("\n]".data(using: .utf8)!)
+  pumpHandle.write("\n]".data(using: .utf8)!)
   pumpHandle.closeFile()
 }
 if let repairHandle = repairHandle {
-  //repairHandle.write("\n]".data(using: .utf8)!)
+  repairHandle.write("\n]".data(using: .utf8)!)
   repairHandle.closeFile()
 }
 if let validatedHandle = validatedHandle { validatedHandle.closeFile()}

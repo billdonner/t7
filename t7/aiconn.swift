@@ -8,7 +8,7 @@
 import Foundation
 
 func callOpenAI(APIKey: String, 
-                decoder:@escaping ((String,Date) throws -> Void),
+                decoder:@escaping DecoderFunc,
                 model:String,
                 systemMessage: String,
                 userMessage: String) async throws {
@@ -37,12 +37,13 @@ func callOpenAI(APIKey: String,
   
   let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
   guard let choices = json?["choices"] as? [[String: Any]], let firstChoice = choices.first,
-        let message = firstChoice["message"] as? [String: Any], let content = message["content"] as? String
+        let message = firstChoice["message"] as? [String: Any], 
+          let content = message["content"] as? String
   else {
     throw T7Errors.badResponseFromAI
   }
       
-  try decoder(content,starttime)
+  try decoder(content,starttime,!firsttime)
 }
 
 

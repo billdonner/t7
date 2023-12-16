@@ -10,7 +10,7 @@ import q20kshare
 import ArgumentParser
 func prep(_ x:String, initial:String) throws  -> FileHandle? {
   if (FileManager.default.createFile(atPath: x, contents: nil, attributes: nil)) {
-    print(">Pumper created \(x)")
+    print(">Created \(x)")
   } else {
     print("\(x) not created."); throw PumpingErrors.badOutputURL
   }
@@ -168,13 +168,13 @@ gverbose = verbose
     // output files get opened for writing incrmentally
  
     if pumpedfile != "" {
-        pumpHandle =  try? prep(pumpedfile,initial:"")
+        pumpHandle =  try? prep(pumpedfile,initial:"[\n")
     }
     if validatedfile != "" {
     validatedHandle = try?  prep(validatedfile,initial:"")// "[\n")
     }
     if repairedfile != "" {
-      repairHandle = try?  prep(repairedfile,initial: "")
+      repairHandle = try?  prep(repairedfile,initial: "[\n")
     }
     if revalidatedfile != "" {
      revalidatedHandle = try?  prep(revalidatedfile,initial:"")// "[\n")
