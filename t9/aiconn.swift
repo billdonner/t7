@@ -18,7 +18,6 @@ func callOpenAI(APIKey: String,
   let parameters = [
     "model":model,
     "max_tokens": 4000,
-   // "time_out":180,// 3 minutes
     "temperature": 1,
     "messages": [
       ["role": "system", "content": systemMessage],
@@ -32,18 +31,28 @@ func callOpenAI(APIKey: String,
   request.httpMethod = "POST"
   request.allHTTPHeaderFields = headers
   request.httpBody = jsonData
+  request.timeoutInterval = 120
   
   let (data, _) = try await URLSession.shared.data(for:request)
   
   let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-  guard let choices = json?["choices"] as? [[String: Any]], let firstChoice = choices.first,
-        let message = firstChoice["message"] as? [String: Any], 
+  guard let choices = json?["choices"] as? [[String: Any]],  
+          let firstChoice = choices.first,
+        let message = firstChoice["message"] as? [String: Any],
           let content = message["content"] as? String
   else {
-    throw T7Errors.badResponseFromAI
+    let str = String(data:data,encoding: .utf8) ?? "fail"
+    print ("*** Error unknown response from AI:")
+    print(str)
+    throw T9Errors.badResponseFromAI
   }
-      
-  try decoder(content,starttime,!firsttime)
+  do {
+    try decoder(content,starttime,!firsttime)
+  } catch {
+    print("*** Error could not decode response from AI: \(error)")
+    print(content)
+    throw T9Errors.badResponseFromAI
+  }
 }
 
 

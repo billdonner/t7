@@ -9,9 +9,9 @@ import Foundation
 import q20kshare
 import ArgumentParser
 
-let t7_version = "0.4.2"
+let t9_version = "0.5.0"
 
-public enum T7Errors: Error {
+public enum T9Errors: Error {
   case commandLineError
   case badResponseFromAI
   case badInputURL(url:String)
@@ -34,42 +34,27 @@ struct QuestionsModelEntry: Codable {
   
   func makeChallenge( )  -> Challenge {
     let from = self
-    return Challenge(question: from.question, topic: from.topic, hint: from.hint, answers: from.answers, correct: from.correct,explanation: from.explanation,
-                     id:UUID().uuidString, source:gmodel )
-      }
+    return Challenge(question: from.question, 
+                     topic: from.topic,
+                     hint: from.hint,
+                     answers: from.answers,
+                     correct: from.correct,
+                     explanation: from.explanation,
+                     id:UUID().uuidString, 
+                     source:gmodel)
+  }
 }
-//struct QuestionsEntry: Codable {
-//  let id:String
-//  let date:Date
-//  let topic:String
-//  let question:String
-//  let answers:[String]
-//  let correct:String
-//  let explanation:String
-//  let hint:String
-//  
-//  
-//  init(from:QuestionsModelEntry) {
-//    id = UUID().uuidString
-//    date = Date()
-//    topic = from.topic
-//    question = from.question
-//    answers = from.answers
-//    correct = from.correct
-//    explanation = from.explanation
-//    hint = from.hint
-//  }
-//}
 
- 
+
+
 func makeChallenge(from:QuestionsModelEntry)  -> Challenge {
   Challenge(question: from.question, topic: from.topic, hint: from.hint, answers: from.answers, correct: from.correct,explanation: from.explanation)
-    }
- 
+}
+
 
 var qmeBuf:String = ""
 
-var firsttime = true 
+var firsttime = true
 var valusrMessage : String = ""
 var valsysMessage : String = ""
 var revalusrMessage : String = ""
@@ -81,14 +66,14 @@ var usrMessage : String = ""
 
 var gmodel:String = ""
 var gverbose: Bool = false
+var gpumptemplate:String = ""
+var grepairtemplate:String = ""
 var apiKey:String = ""
 
 var skipvalidation: Bool = true
 var skiprepair: Bool = false
 var skiprevalidation: Bool = true
 
-var pumpHandle: FileHandle?
-var repairHandle: FileHandle?
 var validatedHandle: FileHandle?
 var revalidatedHandle: FileHandle?
 
@@ -96,6 +81,9 @@ var firstrepaired = false
 var firstpumped = false
 
 var phasescount = 4
+
+var totalPumped = 0
+var totalRepaired = 0
 
 
 func showTemplates() {
@@ -111,7 +99,7 @@ func showTemplates() {
 
 func runAICycle (_ userMessage:String,jobno:String) async throws{
   var phases:[Bool] = [true]// [altpump.isEmpty]
-
+  
   phases += [!skipvalidation]
   phases += [!skiprepair]
   phases += [!skiprevalidation]
@@ -120,23 +108,31 @@ func runAICycle (_ userMessage:String,jobno:String) async throws{
 
 
 func bigLoop () {
-
+  
   let tmsgs = usrMessage.components(separatedBy: "*****")
   let umsgs = tmsgs.compactMap{$0.trimmingCharacters(in: .whitespacesAndNewlines)}
   phasescount = umsgs.count
-      Task  {
-        for str in umsgs {
+  Task  {
+    for str in umsgs {
+      do {
         try await   runAICycle(str, jobno: UUID().uuidString)
-          phasescount -= 1
-          firsttime = false 
+        phasescount -= 1
+        firsttime = false
+      }
+      catch {
+        print("AI returns with \(error)")
+        phasescount = 0
+        break
       }
     }
+  }
 }
 //main starts here
+//test1()
+let startTime = Date()
+print(">T9 Command Line: \(CommandLine.arguments)")
 
-print(">T7 Command Line: \(CommandLine.arguments)")
-
-T7.main()
+T9.main()
 // big Loop runs async calls
 bigLoop()
 // wait for all phases to finish
@@ -150,15 +146,9 @@ while phasescount > 0  {
     even = !even
   }
 }
-if let pumpHandle = pumpHandle {
-  pumpHandle.write("\n]".data(using: .utf8)!)
-  pumpHandle.closeFile()
-}
-if let repairHandle = repairHandle {
-  repairHandle.write("\n]".data(using: .utf8)!)
-  repairHandle.closeFile()
-}
+
 if let validatedHandle = validatedHandle { validatedHandle.closeFile()}
 if let revalidatedHandle = revalidatedHandle { revalidatedHandle.closeFile()}
+let elapsed = String(format:"%4.2f",Date().timeIntervalSince(startTime))
+print("\nExiting, pumped \(totalPumped) and repaired \(totalRepaired) using \(gmodel); all work completed to the best of our abilities in \(elapsed) secs.")
 
-print("\nExiting, all work completed to the best of our abilities.")

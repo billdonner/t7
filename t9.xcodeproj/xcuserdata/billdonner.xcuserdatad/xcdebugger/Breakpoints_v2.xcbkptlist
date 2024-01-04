@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "DA64A58B-2B77-43A6-8445-B5378D838CED"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7C31A547-296C-4866-99E2-828539FCC139"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/parsing.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "prep(_:initial:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F9C872FF-7F99-44EC-ACEA-354BB5A0B55D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/main.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "F9C872FF-7F99-44EC-ACEA-354BB5A0B55D - abd9fc5954998f60"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/main.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "944">
+               </Location>
+               <Location
+                  uuid = "F9C872FF-7F99-44EC-ACEA-354BB5A0B55D - abd9fc5954998f85"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/main.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "1060">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D6548C79-DCAC-455B-B047-FC0884BB6E51"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "perform(_:jobno:msg:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B04E08AB-8430-44BB-946C-4F6BAF589DC8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/t7parsing.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B68990F6-CAA5-4B23-B044-8677C6335B13"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "decodePumpingArray(_:_:_:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "B68990F6-CAA5-4B23-B044-8677C6335B13 - c1402e9cfa60e093"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.decodePumpingArray(Swift.String, Foundation.Date, Swift.Bool) throws -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "122"
+                  endingLineNumber = "122"
+                  offsetFromSymbolStart = "2648">
+               </Location>
+               <Location
+                  uuid = "B68990F6-CAA5-4B23-B044-8677C6335B13 - c1402e9cfa60e0b2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.decodePumpingArray(Swift.String, Foundation.Date, Swift.Bool) throws -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "121"
+                  endingLineNumber = "121"
+                  offsetFromSymbolStart = "2656">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4A4144F6-D0DC-4E2D-A46A-E4D9A4C3999E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "decodeQuestionsArray(_:_:_:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "4A4144F6-D0DC-4E2D-A46A-E4D9A4C3999E - bf8ec171a5f4189a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.decodeQuestionsArray(Swift.String, Foundation.Date, Swift.Bool) throws -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "2224">
+               </Location>
+               <Location
+                  uuid = "4A4144F6-D0DC-4E2D-A46A-E4D9A4C3999E - bf8ec171a5f418fb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.decodeQuestionsArray(Swift.String, Foundation.Date, Swift.Bool) throws -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "91"
+                  endingLineNumber = "91"
+                  offsetFromSymbolStart = "2232">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E5C3F2AE-5DCA-4837-9B85-F67A81FAC646"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "getFileNameAndExtension(from:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "E5C3F2AE-5DCA-4837-9B85-F67A81FAC646 - 9e05169d1835fc42"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.getFileNameAndExtension(from: Swift.String) -&gt; (Swift.String, Swift.String)"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "280">
+               </Location>
+               <Location
+                  uuid = "E5C3F2AE-5DCA-4837-9B85-F67A81FAC646 - 11e0b1d4daf6ebb6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.getFileNameAndExtension(from: Swift.String) -&gt; (Swift.String, Swift.String, Swift.String)"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "308">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "97E09D0E-BC3E-4C78-9C4A-38B0FCAB342C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/main.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "97E09D0E-BC3E-4C78-9C4A-38B0FCAB342C - abd9fc5954998b84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/main.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "148"
+                  endingLineNumber = "148"
+                  offsetFromSymbolStart = "1244">
+               </Location>
+               <Location
+                  uuid = "97E09D0E-BC3E-4C78-9C4A-38B0FCAB342C - abd9fc5954998be3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/main.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "1244">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3FA81FF2-DB41-4315-BA08-C3ACE6902C3C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E29D65F1-57BE-42BF-8059-D37D65629950"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "decodePumpingArray(_:_:_:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DF3A76CE-DF10-45CD-80F2-451F819B5104"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "decodeQuestionsArray(_:_:_:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D7553786-D763-41F8-9600-49B5A1C43304"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "t7/phases.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
+            landmarkName = "test1()"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "D7553786-D763-41F8-9600-49B5A1C43304 - 7f4e30cbd91794a9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.test1() -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "326"
+                  endingLineNumber = "326"
+                  offsetFromSymbolStart = "388">
+               </Location>
+               <Location
+                  uuid = "D7553786-D763-41F8-9600-49B5A1C43304 - 7f4e30cbd9179488"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.test1() -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "325"
+                  endingLineNumber = "325"
+                  offsetFromSymbolStart = "108">
+               </Location>
+               <Location
+                  uuid = "D7553786-D763-41F8-9600-49B5A1C43304 - 7f4e30cbd9179556"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "t7.test1() -&gt; ()"
+                  moduleName = "t7"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billdonner/Documents/t7/t7/phases.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "327"
+                  endingLineNumber = "327"
+                  offsetFromSymbolStart = "108">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

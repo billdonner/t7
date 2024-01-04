@@ -8,31 +8,33 @@
 import Foundation
 import q20kshare
 import ArgumentParser
-func prep(_ x:String, initial:String) throws  -> FileHandle? {
-  if (FileManager.default.createFile(atPath: x, contents: nil, attributes: nil)) {
-    print(">Created \(x)")
-  } else {
-    print("\(x) not created."); throw PumpingErrors.badOutputURL
-  }
-  guard let  newurl = URL(string:x)  else {
-    print("\(x) is a bad url"); throw PumpingErrors.badOutputURL
-  }
-  do {
-    let  fh = try FileHandle(forWritingTo: newurl)
-    fh.write(initial.data(using: .utf8)!)
-    return fh
-  } catch {
-    print("Cant write to \(newurl), \(error)")
-    throw PumpingErrors.cantWrite
-  }
-}
 
-struct T7: ParsableCommand   {
+
+
+func prep9(_ x:String, initial:String) throws  -> FileHandle? {
+ if (FileManager.default.createFile(atPath: x, contents: nil, attributes: nil)) {
+   print(">Created \(x)")
+ } else {
+   print("\(x) not created."); throw PumpingErrors.badOutputURL
+ }
+ guard let  newurl = URL(string:x)  else {
+   print("\(x) is a bad url"); throw PumpingErrors.badOutputURL
+ }
+ do {
+   let  fh = try FileHandle(forWritingTo: newurl)
+   fh.write(initial.data(using: .utf8)!)
+   return fh
+ } catch {
+   print("Cant write to \(newurl), \(error)")
+   throw PumpingErrors.cantWrite
+ }
+}
+struct T9: ParsableCommand   {
   
   static var configuration = CommandConfiguration(
     abstract: "Chat With AI To Generate Data for Q20K (IOS) App",
     discussion: "Step 1 - ask the AI to generate question blocks\nStep 2 - ask the AI to identify problems in generated data\nStep 3 - ask the AI to repair the data\nStep 4 - ask the AI to again identify problems in generated data",
-    version: t7_version )
+    version: t9_version )
   
   @Argument(help: "pumper system template URL")
   var pumpsys: String
@@ -61,10 +63,10 @@ struct T7: ParsableCommand   {
   @Option( help:"alternate pumper input URL, default is \"\"")
   var altpump: String = ""
   
-  @Option( help:"pumpedoutput json stream file")
+  @Option( help:"pumpedoutput directory of json files")
   var pumpedfile: String = ""
   
-  @Option( help:"repaired json stream file")
+  @Option( help:"repaired directory of json files")
   var repairedfile: String = ""
   
   @Option( help:"validated json stream file")
@@ -79,27 +81,26 @@ struct T7: ParsableCommand   {
   @Flag (help:"verbose")
   var verbose : Bool = false 
 
-
-
-  
   mutating func process_cli() throws {
+    // move some of these struct local things for argument parser into global variables!!
     
-
-gverbose = verbose 
-     gmodel = model
+    gpumptemplate = pumpedfile
+    grepairtemplate = repairedfile
+    gverbose = verbose
+    gmodel = model
     // get required template data, no defaults
     guard let sys = URL(string:pumpsys) else {
-      throw T7Errors.badInputURL(url: pumpsys)
+      throw T9Errors.badInputURL(url: pumpsys)
     }
     guard let usr = URL(string:pumpusr) else {
-      throw T7Errors.badInputURL(url: pumpusr)
+      throw T9Errors.badInputURL(url: pumpusr)
     }
     let sysMessage = try String(data:Data(contentsOf:sys),encoding: .utf8)
-    guard let sysMessage = sysMessage else {throw T7Errors.cantDecode(url: pumpsys)}
+    guard let sysMessage = sysMessage else {throw T9Errors.cantDecode(url: pumpsys)}
     systemMessage = sysMessage
     
     let userMessage = try String(data:Data(contentsOf:usr),encoding: .utf8)
-    guard let userMessage = userMessage else {throw T7Errors.cantDecode(url: pumpusr)}
+    guard let userMessage = userMessage else {throw T9Errors.cantDecode(url: pumpusr)}
     usrMessage = userMessage
     
     
@@ -109,7 +110,7 @@ gverbose = verbose
       valusrMessage = ""
     } else {
       guard let valusr = URL(string:valusr) else {
-        throw T7Errors.badInputURL(url: valusr)
+        throw T9Errors.badInputURL(url: valusr)
       }
       valusrMessage = try String(data:Data(contentsOf:valusr),encoding: .utf8) ?? ""
     }
@@ -118,7 +119,7 @@ gverbose = verbose
       valsysMessage = ""
     } else {
       guard let valsys = URL(string:valsys) else {
-        throw T7Errors.badInputURL(url: valsys)
+        throw T9Errors.badInputURL(url: valsys)
       }
       valsysMessage = try String(data:Data(contentsOf:valsys),encoding: .utf8) ?? ""
       
@@ -130,7 +131,7 @@ gverbose = verbose
       repusrMessage = ""
     } else {
       guard let repusr = URL(string:repusr) else {
-        throw T7Errors.badInputURL(url: repusr)
+        throw T9Errors.badInputURL(url: repusr)
       }
       repusrMessage = try String(data:Data(contentsOf:repusr),encoding: .utf8) ?? ""
     }
@@ -139,7 +140,7 @@ gverbose = verbose
       skiprepair = true
     } else {
       guard let repsys = URL(string:repsys) else {
-          throw T7Errors.badInputURL(url: repsys)
+          throw T9Errors.badInputURL(url: repsys)
       }
       repsysMessage = try String(data:Data(contentsOf:repsys),encoding: .utf8) ?? ""
     }
@@ -150,7 +151,7 @@ gverbose = verbose
       revalusrMessage = ""
     } else {
       guard let revalusr = URL(string:revalusr) else {
-        throw T7Errors.badInputURL(url: revalusr)
+        throw T9Errors.badInputURL(url: revalusr)
       }
       revalusrMessage = try String(data:Data(contentsOf:revalusr),encoding: .utf8) ?? ""
     }
@@ -159,25 +160,27 @@ gverbose = verbose
       revalsysMessage = "" 
     } else {
       guard let revalsys = URL(string:revalsys) else {
-        throw T7Errors.badInputURL(url: revalsys)
+        throw T9Errors.badInputURL(url: revalsys)
       }
       revalsysMessage = try String(data:Data(contentsOf:revalsys),encoding: .utf8) ?? ""
       skiprevalidation = false
     }
     
-    // output files get opened for writing incrmentally
+    // in T9 each returned json block is written directly to the file system so there is nothing to do until that point
  
-    if pumpedfile != "" {
-        pumpHandle =  try? prep(pumpedfile,initial:"[\n")
-    }
+//    if pumpedfile != "" {
+//        pumpHandle =  try? prep(pumpedfile,initial:"[\n")
+//    }
     if validatedfile != "" {
-    validatedHandle = try?  prep(validatedfile,initial:"")// "[\n")
+    validatedHandle = try?  prep9(validatedfile,initial:"")// "[\n")
     }
-    if repairedfile != "" {
-      repairHandle = try?  prep(repairedfile,initial: "[\n")
-    }
+    // output files get opened for writing incrmentally
+    
+//    if repairedfile != "" {
+//      repairHandle = try?  prep(repairedfile,initial: "[\n")
+//    }
     if revalidatedfile != "" {
-     revalidatedHandle = try?  prep(revalidatedfile,initial:"")// "[\n")
+     revalidatedHandle = try?  prep9(revalidatedfile,initial:"")// "[\n")
     }
   }
 
@@ -188,7 +191,7 @@ gverbose = verbose
     }
     catch {
       print("Error -> \(error)")
-      throw T7Errors.commandLineError
+      throw T9Errors.commandLineError
     }
     showTemplates()
     apiKey = try getAPIKey()
